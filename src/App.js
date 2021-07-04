@@ -16,6 +16,7 @@ import {
 } from "react-router-dom";
 
 class App extends React.Component {
+
   // componentDidMount = () => {
   //   if(this.props.auth0.isAuthenticated) {
   //     this.props.auth0.getIdTokenClaims()
@@ -38,6 +39,7 @@ class App extends React.Component {
     const { user, isAuthenticated } = this.props.auth0;
     console.log(this.props.auth0)
     console.log(user);
+    console.log(isAuthenticated );
     return(
       <>
         <Router>
