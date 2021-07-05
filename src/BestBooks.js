@@ -4,6 +4,26 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import './BestBooks.css';
 
 class MyFavoriteBooks extends React.Component {
+ componentDidMount = () => {
+    if(this.props.auth0.isAuthenticated) {
+      this.props.auth0.getIdTokenClaims()
+      .then(res => {
+        const jwt = res.__raw;
+        const config = {
+          headers: {"Authorization" : `Bearer ${jwt}`},
+          method: 'get',
+          baseURL: process.env.REACT_APP_SERVER_URL,
+          url: '/authorize'
+        }
+        axios(config)
+          .then(response =>{ console.log(response.data)})
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
+    }
+  }
+
+
   render() {
     return(
       <Jumbotron>
