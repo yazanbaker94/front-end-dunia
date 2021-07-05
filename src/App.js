@@ -7,7 +7,7 @@ import Footer from './Footer';
 import Profile from './Profile';
 import BestBooks from './BestBooks'
 import { withAuth0 } from '@auth0/auth0-react';
-import axios from 'axios';
+
 
 import {
   BrowserRouter as Router,
@@ -27,7 +27,7 @@ class App extends React.Component {
     return(
       <>
         <Router>
-          <IsLoadingAndError>
+          {/* <IsLoadingAndError> */}
             <Header isAuthenticated={isAuthenticated} />
             <Switch>
             <Route exact path="/">{isAuthenticated ? <BestBooks /> : <Login />}
@@ -37,7 +37,7 @@ class App extends React.Component {
       
             </Switch>
             <Footer />
-          </IsLoadingAndError>
+          {/* </IsLoadingAndError> */}
         </Router>
       </>
     );
