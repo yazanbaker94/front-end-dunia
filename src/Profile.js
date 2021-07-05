@@ -2,6 +2,24 @@ import React, { Component } from 'react'
 import { withAuth0 } from '@auth0/auth0-react';
 
 export class Profile extends Component {
+    componentDidMount = () => {
+        if(this.props.auth0.isAuthenticated) {
+          this.props.auth0.getIdTokenClaims()
+          .then(res => {
+            const jwt = res.__raw;
+            const config = {
+              headers: {"Authorization" : `Bearer ${jwt}`},
+              method: 'get',
+              baseURL: process.env.REACT_APP_SERVER_URL,
+              url: '/authorize'
+            }
+            axios(config)
+              .then(response =>{ console.log(response.data)})
+              .catch(err => console.log(err));
+          })
+          .catch(err => console.log(err));
+        }
+      }
     render() {
         return (
             <div>
