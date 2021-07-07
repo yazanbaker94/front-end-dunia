@@ -5,6 +5,7 @@ import './BestBooks.css';
 import { withAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import Carousel from 'react-bootstrap/Carousel';
+import BookFormModal from './BookFormModal';
 
 class BestBooks extends React.Component {
 
@@ -13,6 +14,11 @@ class BestBooks extends React.Component {
 
     this.state = {
       bookData: [],
+     bookName:'',
+      bookDescription:'',
+      bookStatus:'',
+      index:0
+
     };
 
   }
@@ -27,14 +33,76 @@ class BestBooks extends React.Component {
     this.setState({
       bookData: bookData.data.books
     });
-  }
+  };
 
+
+
+ 
+
+  getAdd=async(e)=>{
+    e.preventDefault();
+    
+    const { user } = this.props.auth0;
+    const bodydata={
+      name:this.state.bookName,
+    description:this.state.bookDescription,
+     status:this.state.status,
+     email:user.email
+
+  }
+  const addbook=await axios.post(`http://localhost:3001/books`,bodydata)
+  this.setState({
+    bookData:addbook.data
+
+  })}
+
+
+  addbookname=(e)=>{
+    this.setState({
+      bookName:e.target.value
+    })
+  }
+  addbookdes=(e)=>{
+    this.setState({
+      bookDescription:e.target.value
+    })
+  }
+  addstatus=(e)=>{
+    this.setState({
+      bookStatus:e.target.value
+    }) 
+  } ;
+
+  deleteBook=async(index)=>{
+    const newArrbook=this.state.bookData.filter((bok,idx)=>{
+      return idx !== index;
+    })
+    console.log(newArrbook);
+    this.setState({
+      bookData:newArrbook
+    })
+  
+    const { user } = this.props.auth0;
+  const queryParams={
+    email:user.email
+  }
+  await axios.delete(`http://localhost:3001/book/${index}`,{params:queryParams})
+  };
 
   
 
   render() {
     return(
       <>
+      < BookFormModal getAdd={this.getAdd}
+      addbookname={this.addbookname}
+      addbookdes={this.addbookdes}
+      addstatus={this.addstatus}
+      />
+
+
+
+    
       <Jumbotron>
         <h1>My Favorite Books</h1>
         <p>
@@ -49,16 +117,21 @@ class BestBooks extends React.Component {
                   alt={`slide`}
                 />
                    <Carousel.Caption>
+              
                    <h3>{book.name}</h3>
        <p>{book.description}</p>
        <p>{book.status}</p>
+       <>
+       <button  onClick={(e)=>this.deleteBook(index)}>remove book from shelf</button>
+       </>
                    </Carousel.Caption>
   
  </Carousel.Item>
   )}
    </Carousel>
       </Jumbotron>
-      </>
+       </>
+      
     )
   }
 }
