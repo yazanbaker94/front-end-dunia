@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Header from './Header';
-import IsLoadingAndError from './IsLoadingAndError';
+
 import Login from './Login';
 import Footer from './Footer';
 import Profile from './Profile';
