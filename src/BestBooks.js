@@ -6,6 +6,7 @@ import { withAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import Carousel from 'react-bootstrap/Carousel';
 import BookFormModal from './BookFormModal';
+import  UpdateFormModal from './UpdateFormModal';
 import { Button } from 'react-bootstrap';
 class BestBooks extends React.Component {
 
@@ -17,11 +18,16 @@ class BestBooks extends React.Component {
      bookName:'',
       bookDescription:'',
       bookStatus:'',
+       showUpdateForm:false,
       index:0
 
     };
+  };
 
-  }
+  
+
+
+
   componentDidMount = async () => {
     const { user } = this.props.auth0;
     console.log(user);
@@ -46,7 +52,7 @@ class BestBooks extends React.Component {
     const bodydata={
       name:this.state.bookName,
     description:this.state.bookDescription,
-     status:this.state.status,
+     status:this.state.bookStatus,
      email:user.email
 
   }
@@ -88,8 +94,40 @@ class BestBooks extends React.Component {
     email:user.email
   }
   await axios.delete(`http://localhost:3001/books/${index}`,{params:queryParams})
-  }
-  
+  };
+
+
+  showUpdateForm=(idx)=>{
+    const newArr=this.state.bookData.filter((value,index)=>{
+      return idx ===index
+    });
+
+    this.setState({
+      index:idx,
+      bookName :newArr.name,
+      bookDescription:newArr.description,
+      bookStatus :newArr.status,
+      showUpdateForm:true,
+    })
+      };
+
+
+
+  Updatebook=async(e)=>{
+    const { user } = this.props.auth0;
+    e.preventDefault();
+    const bodydata= {
+      name:this.state.bookName,
+       description:this.state.bookDescription,
+      status:this.state.bookStatus,
+       email:user.email}
+    const updateBook=await axios.put(`http://localhost:3001/book/${this.state.index}`,bodydata)
+  this.setState({
+    bookData:updateBook.data
+  })
+  };
+
+
 
   render() {
 
@@ -110,6 +148,20 @@ class BestBooks extends React.Component {
            This is a collection of my favorite books
          </p>
 
+
+         {this.state.showUpdateForm&& 
+        
+        <UpdateFormModal
+        addbookname={this.addbookname}
+        addbookdes={this.addbookdes}
+        addstatus ={this.addstatus}
+        description={this.state.bookDescription}
+     status={this.state.bookStatus}
+        Updatebook={this.Updatebook}
+
+        />
+        }
+
        <Carousel>
        {this.state.bookData.map((book,index)=>{
          return(
@@ -124,8 +176,10 @@ class BestBooks extends React.Component {
                 />
      <Carousel.Caption >
      <>
-       <button  onClick={()=>this.deleteBook(index)}>remove book from shelf</button>
-      
+       <Button onClick={()=>this.deleteBook(index)}>remove book from shelf</Button>
+     
+       
+       <Button  variant="warning" onClick={() =>this.showUpdateForm (index)} class='button'>update this book</Button>
        </>
        <h3>{book.name}</h3>
        <p>{book.description}</p>
