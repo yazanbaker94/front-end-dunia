@@ -6,7 +6,7 @@ import { withAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import Carousel from 'react-bootstrap/Carousel';
 import BookFormModal from './BookFormModal';
-
+import { Button } from 'react-bootstrap';
 class BestBooks extends React.Component {
 
   constructor(props) {
@@ -73,6 +73,7 @@ class BestBooks extends React.Component {
     }) 
   } ;
 
+
   deleteBook=async(index)=>{
     const newArrbook=this.state.bookData.filter((bok,idx)=>{
       return idx !== index;
@@ -86,54 +87,138 @@ class BestBooks extends React.Component {
   const queryParams={
     email:user.email
   }
-  await axios.delete(`http://localhost:3001/book/${index}`,{params:queryParams})
-  };
-
+  await axios.delete(`http://localhost:3001/books/${index}`,{params:queryParams})
+  }
   
 
   render() {
+
+
     return(
-      <>
-      < BookFormModal getAdd={this.getAdd}
-      addbookname={this.addbookname}
+      // <Jumbotron>
+      <Jumbotron>
+       
+     < BookFormModal getAdd={this.getAdd}
+     addbookname={this.addbookname}
       addbookdes={this.addbookdes}
-      addstatus={this.addstatus}
+       addstatus={this.addstatus}
       />
 
 
+         <h1>My Favorite Books</h1>
+         <p>
+           This is a collection of my favorite books
+         </p>
 
-    
-      <Jumbotron>
-        <h1>My Favorite Books</h1>
-        <p>
-          This is a collection of my favorite books
-        </p>
-        <Carousel >
-        {this.state.bookData.map(book =>
- <Carousel.Item>
-    <img
+       <Carousel>
+       {this.state.bookData.map((book,index)=>{
+         return(
+           
+         
+           <Carousel.Item >
+
+<img
                   className="d-block w-100"
-                  src="https://via.placeholder.com/800x400/111111/111111?text=' '"
+                   src="https://via.placeholder.com/800x400/111111/111111?text=' '"
                   alt={`slide`}
                 />
-                   <Carousel.Caption>
-              
-                   <h3>{book.name}</h3>
+     <Carousel.Caption >
+     <>
+       <button  onClick={()=>this.deleteBook(index)}>remove book from shelf</button>
+      
+       </>
+       <h3>{book.name}</h3>
        <p>{book.description}</p>
        <p>{book.status}</p>
-       <>
-       <button  onClick={(e)=>this.deleteBook(index)}>remove book from shelf</button>
-       </>
-                   </Carousel.Caption>
-  
- </Carousel.Item>
-  )}
-   </Carousel>
+     </Carousel.Caption>
+     </Carousel.Item>
+          )
+        })
+        
+      }
+      </Carousel>
       </Jumbotron>
-       </>
-      
+     
+     
+   
     )
   }
 }
 
-export default withAuth0(BestBooks );
+export default withAuth0(BestBooks);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//     return(
+      
+
+// <Jumbotron>
+
+
+//         <h1>My Favorite Books</h1>
+//         <p>
+//           This is a collection of my favorite books
+//         </p>
+
+      
+
+
+
+    
+      
+//         <Carousel >
+//         {this.state.bookData.map(book, index)=>{
+       
+      
+//  <Carousel.Item>
+//    
+//                  <Carousel.Caption >
+//                  <>   
+//       <Button onClick={() =>this.deleteBook (index)} >remove</Button>
+//        </>
+            
+                  
+              
+//                    <h3>{book.name}</h3>
+//        <p>{book.description}</p>
+//        <p>{book.status}</p>
+//              </Carousel.Caption>
+  
+//  </Carousel.Item>
+  
+//         }
+        
+      
+       
+        
+      
+//    </Carousel>
+//       </Jumbotron>
+   
+     
+//    )
+//   }
+// }
+
+// export default withAuth0(BestBooks );
