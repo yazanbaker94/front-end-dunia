@@ -162,13 +162,6 @@ class BestBooks extends React.Component {
         />
         }
 
-
-
-
-
-
-
-
        <Carousel>
        {this.state.bookData.map((book,index)=>{
          return(
