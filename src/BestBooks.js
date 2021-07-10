@@ -33,7 +33,7 @@ class BestBooks extends React.Component {
     console.log(user);
   
 
-    const bookData = await axios.get(`http://localhost:3001/books?email=${user.email}`);
+    const bookData = await axios.get(`${process.env.REACT_APP_SERVER_URL}/books?email=${user.email}`);
     console.log('book data exists!', bookData.data.books);
 
     this.setState({
@@ -56,7 +56,7 @@ class BestBooks extends React.Component {
      email:user.email
 
   }
-  const addbook=await axios.post(`http://localhost:3001/books`,bodydata)
+  const addbook=await axios.post(`${process.env.REACT_APP_SERVER_URL}/books`,bodydata)
   this.setState({
     bookData:addbook.data
 
@@ -93,7 +93,7 @@ class BestBooks extends React.Component {
   const queryParams={
     email:user.email
   }
-  await axios.delete(`http://localhost:3001/books/${index}`,{params:queryParams})
+  await axios.delete(`${process.env.REACT_APP_SERVER_URL}/books/${index}`,{params:queryParams})
   };
 
 
@@ -121,7 +121,7 @@ class BestBooks extends React.Component {
        description:this.state.bookDescription,
       status:this.state.bookStatus,
        email:user.email}
-    const updateBook=await axios.put(`http://localhost:3001/book/${this.state.index}`,bodydata)
+    const updateBook=await axios.put(`${process.env.REACT_APP_SERVER_URL}/book/${this.state.index}`,bodydata)
   this.setState({
     bookData:updateBook.data
   })
